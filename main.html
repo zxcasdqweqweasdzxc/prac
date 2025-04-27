@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Experiments Copier</title>
+    <style>
+        body {
+            background: #0f172a;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #38bdf8;
+        }
+
+        .buttons-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        button {
+            background: #1e293b;
+            border: 2px solid #38bdf8;
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 16px;
+            color: #38bdf8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #38bdf8;
+            color: #0f172a;
+            transform: translateY(-3px);
+        }
+
+        .notification {
+            margin-top: 20px;
+            color: #4ade80;
+            font-size: 18px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Experiment Files Copier</h1>
+    <div class="buttons-container" id="buttonsContainer">
+        <!-- Buttons will be generated here -->
+    </div>
+    <div class="notification" id="notification">Copied to Clipboard!</div>
+
+    <script>
+        const experiments = [
+            { name: 'Implicit-Explicit', file: 'exp2.txt' },
+            { name: 'Fragment-DataPass', file: 'exp3.txt' },
+            { name: 'Grid Layout', file: 'exp4.txt' },
+            { name: 'Recycle View', file: 'exp5.txt' },
+            { name: 'WebView', file: 'exp6.txt' },
+            { name: 'Multiple Fragments', file: 'exp7.txt' },
+            { name: 'Image Slider', file: 'exp4.txt' },
+            { name: 'Media Player', file: 'exp9.txt' },
+            { name: 'Color-Picker', file: 'exp11.txt' },
+        ];
+
+        const buttonsContainer = document.getElementById('buttonsContainer');
+        const notification = document.getElementById('notification');
+
+        // Create buttons dynamically
+        experiments.forEach(exp => {
+            const btn = document.createElement('button');
+            btn.textContent = exp.name;
+            btn.onclick = () => copyFileContent(exp.file);
+            buttonsContainer.appendChild(btn);
+        });
+
+        async function copyFileContent(filePath) {
+            try {
+                const response = await fetch(filePath);
+                if (!response.ok) throw new Error('File not found');
+                const text = await response.text();
+                await navigator.clipboard.writeText(text);
+                showNotification();
+            } catch (error) {
+                alert('Failed to copy: ' + error.message);
+            }
+        }
+
+        function showNotification() {
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 2000);
+        }
+    </script>
+
+</body>
+
+</html>
